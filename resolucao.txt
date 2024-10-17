@@ -1,0 +1,42 @@
+/* 1 - Selecione a quantidade total de medicamentos em estoque */
+
+SELECT SUM(m.ESTOQUE) AS TOTAL_MEDICAMENTOS_ESTOQUE
+FROM MEDICAMENTOS m 
+
+/* 2 - Selecione a média de idade dos tutores */
+
+SELECT AVG((CURRENT_DATE - t.DATA_NASCIMENTO) / 365.25) AS MEDIA_IDADE_TUTORES
+FROM TUTOR t 
+
+/* 3 - Selecione o menor valor unitário entre os medicamentos */
+
+SELECT MIN(m.PRECO) AS MENOR_VALOR
+FROM MEDICAMENTOS m
+
+/* 4 - Selecione o maior peso entre os pacientes */
+
+SELECT MAX(p.PESO) AS MAIOR_PESO
+FROM PACIENTE p 
+
+/* 5 - Selecione o número total de tutores na base de dados */
+
+SELECT COUNT(*) AS QNT_TUTORES
+FROM TUTOR t
+
+/* 6 - Selecione o valor total em estoque de medicamentos para cada unidade */
+
+SELECT m.UNIDADE, SUM(m.ESTOQUE * m.PRECO) AS VALOR_EM_ESTOQUE
+FROM MEDICAMENTOS m 
+GROUP BY m.UNIDADE 
+
+/* 7 - Selecione o ID da receita e a soma total dos valores individuais dos itens da 
+ * receita para cada receita com um valor total superior a 100. */
+
+SELECT i.ID_RECEITA
+	 , SUM(i.QUANTIDADE * (SELECT m.PRECO FROM MEDICAMENTOS m WHERE i.ID_MEDICAMENTO = m.ID_MEDICAMENTO)) AS TOTAL_VALOR
+FROM ITENSRECEITA i 
+GROUP BY 1
+HAVING SUM(i.QUANTIDADE * (SELECT m.PRECO FROM MEDICAMENTOS m WHERE i.ID_MEDICAMENTO = m.ID_MEDICAMENTO)) > 100
+
+
+
